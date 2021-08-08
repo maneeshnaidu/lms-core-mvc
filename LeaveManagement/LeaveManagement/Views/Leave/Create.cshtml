@@ -1,0 +1,124 @@
+﻿@model LeaveManagement.Models.LeaveApplicationModel
+@inject LeaveManagement.Repository.ILeaveRepository _leaveRepository
+@inject LeaveManagement.Repository.ILeaveAllocationRepository _leaveAllocationRepository
+@inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> _signInManager
+
+@{
+    ViewData["Title"] = "Add User";
+}
+
+
+<div class="row">
+    <div class="col-md-7">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Leave Application Form</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form method="post" asp-action="Create" asp-controller="Leave">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="UserId" type="hidden" value="@ViewBag.UserId" />
+                    <div class="form-group">
+                        <label asp-for="LeaveTypeId"></label>
+                        <select asp-for="LeaveTypeId" class="form-control" asp-items="(await _leaveRepository.GetAllLeaveTypes()).Select(l => new SelectListItem() { Text = l.Type, Value = l.Id.ToString()})">
+                            <option value="">Please choose leave type</option>
+                        </select>
+                        <span asp-validation-for="LeaveTypeId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FromDate" class="control-label"></label>
+                        <input asp-for="FromDate" class="form-control" />
+                        <span asp-validation-for="FromDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LeaveDays" class="control-label"></label>
+                        <input asp-for="LeaveDays" type="number" step="0.5" class="form-control" />
+                        <span asp-validation-for="LeaveDays" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LeaveReason" class="control-label"></label>
+                        <textarea id="summernote" asp-for="LeaveReason" class="form-control" ></textarea>
+                        <span asp-validation-for="LeaveReason" class="text-danger"></span>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Apply Leave</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /.card -->
+
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Allocated Leaves</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            @*<th style="width: 10px">#</th>*@
+                            <th>Type</th>
+                            @*<th>Progress</th>*@
+                            <th style="width: 40px">Remaining Days</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var allocation in await _leaveAllocationRepository.GetLeaveAllocationsByEmployee(ViewBag.UserId))
+                        {
+                            <tr>
+                                @*<td>1.</td>*@
+                                <td>@allocation.LeaveType</td>
+                                @*<td>
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar progress-bar-danger" style="width: @allocation.NumberOfDays%"></div>
+                                    </div>
+                                </td>*@
+                                <td><span class="badge bg-success">@allocation.NumberOfDays</span></td>
+                            </tr>
+                        }
+
+                        
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+            @*<div class="card-footer clearfix">
+                <ul class="pagination pagination-sm m-0 float-right">
+                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                </ul>
+            </div>*@
+        </div>
+        <!-- /.card -->
+    </div>
+    
+</div>
+
+
+
+    @section Scripts {
+        <!-- Summernote -->
+        <script src="~/plugins/summernote/summernote-bs4.min.js"></script>
+        <script>
+            $(function () {
+                // Summernote
+                $('#summernote').summernote()
+
+
+            })
+
+            
+        </script>
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
