@@ -37,54 +37,62 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
-                with font-awesome or any other icon font library -->
-                <li class="nav-item menu-open">
-                    <a href="#" class="nav-link active">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            General Settings
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a asp-controller="Users" asp-action="Index" class="nav-link active">
-                                <i class="fas fa-users nav-icon"></i>
-                                <p>Users</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="LeaveType" asp-action="Index" class="nav-link">
-                                <i class="fas fa-screwdriver nav-icon"></i>
-                                <p>Leave Types</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a asp-controller="Leave" asp-action="Index" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Leave Applications
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
+    with font-awesome or any other icon font library -->
+
+                @if (User.IsInRole("Admin, SuperAdmin"))
+                {
+                    <li class="nav-item menu-open">
+                        <a href="#" class="nav-link active">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                General Settings
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a asp-controller="Users" asp-action="Index" class="nav-link active">
+                                    <i class="fas fa-users nav-icon"></i>
+                                    <p>Users</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="LeaveType" asp-action="Index" class="nav-link">
+                                    <i class="fas fa-screwdriver nav-icon"></i>
+                                    <p>Leave Types</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a asp-controller="Leave" asp-action="Index" class="nav-link">
+                            <i class="fas fa-list"></i>
+                            <p>
+                                Leave Applications
+                                <span class="right badge badge-danger">New</span>
+                            </p>
+                        </a>
+                    </li>
+
+                }
+
+
                 <li class="nav-item">
                     <a asp-controller="Leave" asp-action="GetUserLeaveApplications" asp-route-id="@ViewBag.UserId" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
+                        <i class="fas fa-list"></i>
                         <p>
                             My Leave Applications
-                            <span class="right badge badge-danger">New</span>
+                            @*<span class="right badge badge-danger">New</span>*@
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a asp-controller="Leave" asp-action="Create" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
+                        <i class="nav-icon fas fa-pen-nib"></i>
                         <p>
                             Apply for Leave
-                            <span class="right badge badge-danger">New</span>
+                            @*<span class="right badge badge-danger">New</span>*@
                         </p>
                     </a>
                 </li>

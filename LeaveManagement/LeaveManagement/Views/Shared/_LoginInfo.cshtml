@@ -16,13 +16,13 @@
     </li>
 
 }
-@*else
+else
 {
     <li class="nav-item">
         <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path" class="btn btn-outline-secondary">Login</a>
-        <a asp-controller="Account" asp-action="Signup" class="btn btn-primary text-light">Register</a>
+        @*<a asp-controller="Account" asp-action="Signup" class="btn btn-primary text-light">Register</a>*@
     </li>
-}*@
+}
 
 
 
